@@ -11,11 +11,9 @@ const fetcher = function (userRequest) {
   let store = userRequest[1];
   request(retrieve, (error, response, body) => {
     if (response.statusCode !== 200) {
-
-      console.log("Something went wrong!");
+      (response.statusCode === 404) ? stdout.write("URL not found! \n") : stdout.write("URL invalid! Status Code:", response.statusCode, "\n");
       process.exit();
     }
-    console.log(response.statusCode);
     writeFile(store, body);
   });
 };
