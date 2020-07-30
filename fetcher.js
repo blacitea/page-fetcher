@@ -11,8 +11,14 @@ const fetcher = function (userRequest) {
   let retrieve = userRequest[0];
   let store = userRequest[1];
   request(retrieve, (error, response, body) => {
+    console.log(response.statusCode);
     fs.open(store, 'ax', (err, fd) => {
-      if (err) {
+      console.log(err);
+      if (err && err.code === 'EACCES') {
+        stdout.write("Invalid path for write file, please verify. \n");
+        process.exit();
+      }
+      if (err && err.code === 'EEXIST') {
         const rl = readline.createInterface({
           input: process.stdin,
           output: process.stdout
