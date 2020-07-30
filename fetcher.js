@@ -4,10 +4,7 @@ const fs = require('fs');
 const readline = require('readline');
 const { stdout } = require("process");
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+
 
 
 const fetcher = function (userRequest) {
@@ -16,6 +13,10 @@ const fetcher = function (userRequest) {
   request(retrieve, (error, response, body) => {
     fs.open(store, 'ax', (err, fd) => {
       if (err) {
+        const rl = readline.createInterface({
+          input: process.stdin,
+          output: process.stdout
+        });
         rl.question('File already exist, overwrite? (yes / no)       ', (answer) => {
           if (answer.toLowerCase() === 'yes') {
             write(body);
@@ -25,6 +26,8 @@ const fetcher = function (userRequest) {
             rl.close();
           }
         });
+      } else {
+        write(body);
       }
     });
   });
